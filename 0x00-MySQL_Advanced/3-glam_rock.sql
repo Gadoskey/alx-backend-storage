@@ -5,5 +5,5 @@
 SELECT band_name, 
        IFNULL(split, 2020) - IFNULL(formed, 0)
 FROM bands
-WHERE style = 'Glam rock'
+WHERE style LIKE '%Glam rock%'
 ORDER BY lifespan DESC;
