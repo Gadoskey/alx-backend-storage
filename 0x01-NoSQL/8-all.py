@@ -11,7 +11,7 @@ def list_all(mongo_collection):
     empty_list = []
     doc_list = mongo_collection.find()
 
-    if doc_list.count() <= 0:
+    if doc_list.count() == 0:
         # Returns an empty list if no document in the collection
         return empty_list
 
