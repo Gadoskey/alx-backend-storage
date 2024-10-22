@@ -1,5 +1,5 @@
 -- Author: Gadoskey
--- File: add_bonus_procedure.sql
+-- File: 6-bonus.sql
 -- SQL script to create a stored procedure AddBonus that adds a new correction for a student
 
 DELIMITER $$
