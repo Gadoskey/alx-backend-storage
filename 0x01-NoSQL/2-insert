@@ -1,7 +1,5 @@
-// Author: Gadoskey
-// File: 2-insert
+// Author - Gadoskey
+// File - 2-insert
 // Inserts a document with the attribute "name" into the "school" collection
 
-db.school.insertOne({
-  name: "Holberton school",
-});
+db.school.insert({ name: "Holberton school" })
