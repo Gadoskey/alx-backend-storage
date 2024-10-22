@@ -24,7 +24,6 @@ BEGIN
     INSERT INTO corrections (user_id, project_id, score)
     VALUES (user_id, project_id, score);
 
-    -- Optionally, update the user's average score here (if needed)
 END$$
 
 DELIMITER ;
