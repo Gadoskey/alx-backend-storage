@@ -4,6 +4,9 @@ Author: Gadoskey
 File: exercise.py
 Description: A Python class that write strings to Redis
 """
+from typing import Callable, Optional, Union
+from uuid import uuid4
+import redis
 
 
 class Cache:
