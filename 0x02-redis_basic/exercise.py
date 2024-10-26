@@ -5,8 +5,21 @@ File: exercise.py
 Description: A Python class that writes and retrieves strings to/from Redis
 """
 from typing import Callable, Optional, Union
+from functools import wraps
 from uuid import uuid4
 import redis
+
+
+def count_calls(method: Callable) -> Callable:
+    """
+    Decorator that counts how many times a method is called.
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        key = method.__qualname__  # Get the qualified name of the method
+        self._redis.incr(key)  # Increment the call count in Redis
+        return method(self, *args, **kwargs)  # Call the original method
+    return wrapper
 
 
 class Cache:
@@ -14,7 +27,8 @@ class Cache:
         # Initializing Cache with Redis instance
         self._redis = redis.Redis()
         self._redis.flushdb()
-
+        
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Stores data in Redis and returns a unique key.
