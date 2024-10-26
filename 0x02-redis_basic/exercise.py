@@ -36,10 +36,18 @@ class Cache:
         """
         Retrieves data from Redis and decodes it to a string.
         """
-        return self.get(key, fn=lambda d: d.decode("utf-8"))
+        data = self.get(key)  # Get the raw data from Redis
+        if data is not None:
+            decoded_data = data.decode("utf-8")  # Decode str to a UTF-8 string
+            return decoded_data
+        return None
 
     def get_int(self, key: str) -> Optional[int]:
         """
         Retrieves data from Redis and converts it to an integer.
         """
-        return self.get(key, fn=int)
+        data = self.get(key)  # Get the raw data from Redis
+        if data is not None:
+            int_data = int(data)  # Convert str to an integer
+            return int_data
+        return None
