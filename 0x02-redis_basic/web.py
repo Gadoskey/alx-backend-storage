@@ -1,41 +1,39 @@
 #!/usr/bin/env python3
-"""
-File: web.py
-Description: A Python script that retrieves a web page,
-caches it, and tracks access count.
-"""
-import requests
-import redis
+""" Redis Module for Caching and Counting URL Requests """
+
 from functools import wraps
+import redis
+import requests
 from typing import Callable
 
-# Connect to Redis
-cache = redis.Redis()
+# Initialize Redis connection
+redis = redis.Redis()
 
 def count_requests(method: Callable) -> Callable:
-    """Decorator to count how many times a URL
-    was accessed and cache the page content."""
+    """Decorator to count URL requests and cache HTML content."""
     @wraps(method)
     def wrapper(url: str) -> str:
-        # Increment the count for this URL
-        count_key = f"count:{url}"
-        cache.incr(count_key)
+        """Wrapper for the decorated function."""
+        
+        # Increment the request count for the given URL
+        redis.incr(f"count:{url}")
+        
+        # Check if the HTML content for the URL is already cached
+        cached_html = redis.get(f"cached:{url}")
+        
+        # If cached, return the cached content
+        if cached_html:
+            return cached_html.decode('utf-8')
+        
+        # Otherwise, fetch the HTML, cache it, and return the content
+        html = method(url)
+        redis.setex(f"cached:{url}", 10, html)  # Cache expires in 10 seconds
+        return html
 
-        # Check if the page content is cached
-        cached_content = cache.get(url)
-        if cached_content:
-            return cached_content.decode("utf-8")
-
-        # If not cached, retrieve from the URL
-        content = method(url)
-
-        # Cache the content with a 10-second expiration
-        cache.setex(url, 10, content)
-        return content
     return wrapper
 
 @count_requests
 def get_page(url: str) -> str:
-    """Fetches the HTML content of a URL."""
+    """Fetch the HTML content of a URL."""
     response = requests.get(url)
     return response.text
