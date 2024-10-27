@@ -56,8 +56,8 @@ def replay(method: Callable):
 
     # Display the number of calls and each call's details
     print(f"{name} was called {len(inputs)} times:")
-    for input_args, output in zip(inputs, outputs):
-        print(f"{name}(*{input_args.decode('utf-8')}) -> {output.decode('utf-8')}")
+    for args, output in zip(inputs, outputs):
+        print(f"{name}(*{args.decode('utf-8')}) -> {output.decode('utf-8')}")
 
 
 class Cache:
@@ -76,8 +76,8 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str,fn: Optional[Callable] = None) -> Union[str,
-                                                                   bytes, int, float, None]:
+    def get(self, key: str, 
+            fn: Optional[Callable] = None) -> Union[str, bytes, int, float, None]:
         """
         Retrieves data from Redis.
         """
