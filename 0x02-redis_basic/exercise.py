@@ -26,7 +26,7 @@ def call_history(method: Callable) -> Callable:
     """
     Decorator that stores the history of inputs and outputs for a particular function.
     """
-    @functools.wraps(method)
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         # Input and output keys for storing in Redis
         input_key = f"{method.__qualname__}:inputs"
